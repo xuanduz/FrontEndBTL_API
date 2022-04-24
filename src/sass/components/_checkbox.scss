@@ -1,0 +1,57 @@
+.filter-item {
+  margin: 5px 0;
+  padding-left: 25px;
+  display: flex;
+  align-items: center;
+  @include mobile {
+    margin: 3px 0;
+  }
+  &-container {
+    position: relative;
+    text-transform: uppercase;
+
+    input {
+      position: absolute;
+      opacity: 0;
+      height: 0;
+      width: 0;
+      left: -10px;
+      cursor: pointer;
+    }
+    .checkmark {
+      position: absolute;
+      z-index: 0;
+      top: 0;
+      left: -25px;
+      height: 17px;
+      width: 17px;
+      background-color: $color-blue;
+      border-radius: 3px;
+    }
+    .checkmark:after {
+      content: "";
+      position: absolute;
+      z-index: 4;
+      display: none;
+    }
+    input[type="checkbox"]:checked ~ .checkmark:after {
+      display: inline-block;
+      background-color: $color-blue;
+      @include tablet {
+        display: inline-block;
+        background-color: $color-blue;
+      }
+    }
+    .checkmark:after {
+      left: 5px;
+      top: 1px;
+      width: 7px;
+      height: 12px;
+      border: solid white;
+      border-width: 0 3px 3px 0;
+      -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+      transform: rotate(45deg);
+    }
+  }
+}

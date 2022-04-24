@@ -1,0 +1,44 @@
+@import "./variable";
+@import "./base";
+@import "./mixin";
+
+@import "./components/toggleTheme";
+@import "./components/header";
+@import "./components/carousel";
+@import "./components/policy";
+@import "./components/saleTag";
+@import "./components/productCard";
+@import "./components/footer";
+@import "./components/filter";
+@import "./components/button";
+@import "./components/checkbox";
+@import "./components/toast";
+@import "./components/login";
+@import './components/contact';
+
+@import "./components/products";
+@import "./components/cart";
+@import "./components/home";
+@import "./components/productView";
+
+@import "./setupTheme";
+
+img {
+  width: 100%;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+@include tablet {
+  h2 {
+    font-size: 18px !important;
+  }
+  h3 {
+    font-size: 16px !important;
+  }
+  p {
+    font-size: 13px;
+  }
+}

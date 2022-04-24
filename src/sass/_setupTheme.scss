@@ -1,0 +1,68 @@
+body {
+  color: $font-color-light;
+  transition: color 0.3s ease-in;
+  font-family: $font-popular;
+}
+body.dark-mode {
+  color: $font-color-dark;
+  background-color: $background-color-dark;
+}
+.dark-mode .header-container {
+  // box-shadow: 2px 5px 15px #2121249f;
+  background-color: $background-color-dark;
+}
+.dark-mode #nav-icon3 span {
+  background-color: $background-color-light !important;
+}
+
+.dark-mode .header-container-sidebar {
+  background-color: $background-color-dark !important;
+}
+
+.dark-mode .header-nav-items ul a:hover {
+  background-color: $background-color-light !important;
+  color: $font-color-light !important;
+}
+.dark-mode .header-nav-items{
+  color:  $font-color-dark !important;
+}
+.dark-mode .header-nav-items i {
+  color: $font-color-dark !important;
+}
+
+.dark-mode .card-container .card {
+  box-shadow: 2px 5px 20px rgb(32, 32, 32) !important;
+}
+.dark-mode .card-details-center {
+  background-color: $background-color-dark !important;
+}
+
+.dark-mode .card-container .card {
+  box-shadow: 2px 10px 20px rgb(34, 34, 34);
+}
+
+.dark-mode .filter {
+  @include tablet {
+    background-color: $background-color-dark;
+  }
+}
+
+.dark-mode .footer-container {
+  background-color: $background-color-footer-dark;
+}
+// --- product-view ---
+.dark-mode .product-view-description .linear-gradient {
+  background-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0),
+    $background-color-dark
+  );
+}
+
+.dark-mode hr {
+  background-color: rgb(161, 161, 161);
+}
+
+.dark-mode .cart-footer {
+  background-color: $background-color-footer-dark !important;
+}

@@ -1,0 +1,41 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300&display=swap");
+.toast-container {
+  position: fixed;
+  z-index: 300;
+  top: 100;
+  right: 50px;
+  transform: translateX(150%);
+  width: 350px;
+  color: $font-color-light;
+  background-color: white;
+  box-shadow: 2px 2px 15px $font-color-light;
+  border-left: 3px solid red;
+  border-radius: 3px;
+  box-sizing: border-box;
+  font-family: "Montserrat", sans-serif;
+  transition: transform 0.3s ease-in-out;
+
+  @include tablet {
+    width: 280px;
+  }
+  @include mobile {
+    width: 200px;
+  }
+  .toast {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 20px 20px 25px;
+    &-text {
+    }
+    &-close {
+      height: 100%;
+      margin-right: 10px;
+      font-size: 25px;
+      display: flex;
+      cursor: pointer;
+    }
+  }
+}
+.toast-active {
+  transform: translateX(0%) !important;
+}

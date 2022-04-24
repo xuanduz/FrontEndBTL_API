@@ -1,0 +1,40 @@
+.home {
+  padding-top: 120px;
+  width: 80%;
+  height: auto;
+  margin: 0 auto;
+
+  position: relative;
+  z-index: 0;
+  @include tablet {
+    width: 70%;
+  }
+  .section-sale-product {
+    margin-top: 50px;
+    width: 100%;
+    height: auto;
+    h2 {
+      font-weight: bold;
+    }
+    &-banner {
+      img {
+        width: 100%;
+      }
+    }
+    &-card {
+      margin-top: 30px;
+      width: 100%;
+    }
+    @include mobile {
+      h2 {
+        font-size: 20px;
+        font-weight: bold;
+      }
+    }
+  }
+}
+.section-title {
+  text-align: center;
+  padding: 30px 0;
+  font-size: 35px;
+}

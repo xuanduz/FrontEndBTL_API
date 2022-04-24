@@ -1,0 +1,34 @@
+.toggle-theme {
+  position: fixed;
+  z-index: 50;
+  bottom: 50px;
+  right: 30px;
+
+  width: 60px;
+  height: 30px;
+  border-radius: 20px;
+  background-color: #a6a6a6;
+  padding: 2px;
+  box-sizing: border-box;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  cursor: pointer;
+  &-circle {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+
+    position: absolute;
+    left: 4px;
+
+    background-color: $background-color-light;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+}
+.active > .toggle-theme-circle {
+  transform: translateX(100%);
+}

@@ -1,0 +1,27 @@
+.filter {
+  @include tablet {
+    background-color: $background-color-light;
+    box-shadow: 5px 0px 15px black;
+    width: 300px;
+    height: 100vh;
+    padding: 70px 50px 0 50px;
+    transition: transform 0.3s ease-in-out;
+  }
+  @include mobile {
+    width: 250px;
+    padding: 30px 30px 0 30px;
+  }
+  h3 {
+    font-size: 15px;
+  }
+  label {
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  &-submit {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
