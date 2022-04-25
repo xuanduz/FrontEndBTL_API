@@ -99,7 +99,6 @@ class Cart extends Component {
     );
     return (
       <div className="cart-container">
-        {console.log("prop redux ", productRedux[0])}
         <div className="cart row">
           <div className="cart-main col-12">
             <div className="cart-main-header row">
@@ -108,11 +107,6 @@ class Cart extends Component {
               <div className="col-2">Số lượng</div>
               <div className="col-2">Số tiền</div>
             </div>
-            {productRedux &&
-              productRedux.length > 0 &&
-              productRedux.map((item, index) => {
-                return <h4 key={index}>{item.CD_PID}</h4>;
-              })}
             {this.state.cartItems &&
               this.state.cartItems.length > 0 &&
               this.state.cartItems.map((item, index) => {
@@ -209,52 +203,54 @@ class Cart extends Component {
                 );
               })}
           </div>
-
-          <div className="cart-footer-container row">
-            <div className="cart-footer row">
-              <div className="cart-footer-left col-lg-6 col-12">
-                <div className="cart-footer-left-icon">
-                  <i className="bx bxs-truck"></i>
+          {this.state.cartItems && this.state.cartItems.length > 0 && (
+            <div className="cart-footer-container row">
+              <div className="cart-footer row">
+                <div className="cart-footer-left col-lg-6 col-12">
+                  <div className="cart-footer-left-icon">
+                    <i className="bx bxs-truck"></i>
+                  </div>
+                  <div
+                    className={
+                      `car-footer-left-freeship` +
+                      (totalPrice >= 200000 ? `` : ` hide`)
+                    }
+                  >
+                    <h4>Miễn phí giao hàng</h4>
+                  </div>
+                  <div
+                    className={
+                      `car-footer-left-charges` +
+                      (totalPrice < 200000 ? `` : ` hide`)
+                    }
+                  >
+                    <h4>
+                      Phí giao hàng <span>30.000₫</span>
+                    </h4>
+                    <p>
+                      Mua trên <span>200.000₫</span> sẽ được{" "}
+                      <span>Freeship</span>
+                    </p>
+                  </div>
                 </div>
-                <div
-                  className={
-                    `car-footer-left-freeship` +
-                    (totalPrice >= 200000 ? `` : ` hide`)
-                  }
-                >
-                  <h4>Miễn phí giao hàng</h4>
-                </div>
-                <div
-                  className={
-                    `car-footer-left-charges` +
-                    (totalPrice < 200000 ? `` : ` hide`)
-                  }
-                >
-                  <h4>
-                    Phí giao hàng <span>30.000₫</span>
-                  </h4>
-                  <p>
-                    Mua trên <span>200.000₫</span> sẽ được <span>Freeship</span>
-                  </p>
-                </div>
-              </div>
-              <div className="cart-footer-right col-lg-6 col-12">
-                <div className="cart-footer-right-total-price">
-                  <b>Tổng cộng</b>
-                  <span>
-                    {(totalPrice < 200000 ? totalPrice + 30000 : totalPrice)
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
-                    ₫
-                  </span>
-                </div>
-                <div className="cart-footer-right-btn">
-                  <div className="cart-footer-right-total-amount"></div>
-                  <Button text={"Thanh toán"} />
+                <div className="cart-footer-right col-lg-6 col-12">
+                  <div className="cart-footer-right-total-price">
+                    <b>Tổng cộng</b>
+                    <span>
+                      {(totalPrice < 200000 ? totalPrice + 30000 : totalPrice)
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+                      ₫
+                    </span>
+                  </div>
+                  <div className="cart-footer-right-btn">
+                    <div className="cart-footer-right-total-amount"></div>
+                    <Button text={"Thanh toán"} />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     );

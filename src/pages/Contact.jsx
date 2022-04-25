@@ -9,10 +9,20 @@ function Contact() {
     latitude: 21.0229,
     zoom: 12,
   });
+  const [location, setLocation] = useState({});
+  const [lng, setLng] = useState(105.8049);
+  const [lat, setLat] = useState(21.0229);
   const [showPopup, setShowPopup] = React.useState(true);
   const token =
     "pk.eyJ1IjoieHVhbmR1eiIsImEiOiJjbDI2ejY0ZzYyb251M2pscHFyYmlya3hmIn0.O7XSrEECiHaCsN3K9Zmd1A";
-
+  // useEffect(() => {
+  //   if (!map.current) return; // wait for map to initialize
+  //   map.current.on("move", () => {
+  //     setLng(map.current.getCenter().lng.toFixed(4));
+  //     setLat(map.current.getCenter().lat.toFixed(4));
+  //     // setZoom(map.current.getZoom().toFixed(2));
+  //   });
+  // });
   return (
     <div className="contact-container">
       <div className="contact">
@@ -28,16 +38,41 @@ function Contact() {
         </p>
         <h5>Hệ thống cửa hàng</h5>
         <div className="map">
+          <div className="location"></div>
+          <div className="sidebar">
+            Longitude: {lng} | Latitude: {lat}
+            <br />
+            <span>
+              {Object.keys(location).length !== 0 &&
+                location.data.features[0].place_name}
+            </span>
+          </div>
           <ReactMapGL
             initialViewState={viewport}
             mapStyle="mapbox://styles/mapbox/streets-v11"
             mapboxAccessToken={token}
+            onMouseDown={(e) => {
+              setLat(e.lngLat.lat.toFixed(4));
+              setLng(e.lngLat.lng.toFixed(4));
+              axios
+                .get(
+                  `https://api.mapbox.com/geocoding/v5/mapbox.places/${e.lngLat.lng.toFixed(
+                    4
+                  )},${e.lngLat.lat.toFixed(
+                    4
+                  )}.json?access_token=pk.eyJ1IjoieHVhbmR1eiIsImEiOiJjbDI2ejY0ZzYyb251M2pscHFyYmlya3hmIn0.O7XSrEECiHaCsN3K9Zmd1A`
+                )
+                .then((res) => setLocation(res));
+            }}
           >
             <ScaleControl />
             <Marker
               longitude={105.8049}
               latitude={21.0229}
               anchor="bottom"
+              onClick={(e) => {
+                console.log(e);
+              }}
             ></Marker>
             <Marker
               longitude={105.78}

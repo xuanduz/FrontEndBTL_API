@@ -232,12 +232,40 @@ class ProductView extends Component {
               <h2>{this.state.productDetail.P_name}</h2>
             </div>
             <div className="product-view-detail-price">
-              <span>
+              {console.log(this.state.productDetail)}
+              {this.state.productDetail.P_discount ||
+              this.state.productDetail.P_discount > 0 ? (
+                <>
+                  <del>
+                    {parseInt(this.state.productDetail.P_Price)
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+                    ₫
+                  </del>
+                  <span>
+                    {parseInt(
+                      this.state.productDetail.P_Price *
+                        (1 - this.state.productDetail.P_discount * 0.01)
+                    )
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+                    ₫
+                  </span>
+                </>
+              ) : (
+                <span>
+                  {parseInt(this.state.productDetail.P_Price)
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+                  ₫
+                </span>
+              )}
+              {/* <span>
                 {parseInt(this.state.productDetail.P_Price)
                   .toString()
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
                 ₫
-              </span>
+              </span> */}
             </div>
             <hr />
             <div className="product-view-detail-color">

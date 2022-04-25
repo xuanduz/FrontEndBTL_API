@@ -53,23 +53,14 @@ const setLocalStore = (list) => {
   localStorage.setItem("CART-ITEMS", JSON.stringify(list));
 };
 
-// const getInitialState = async () => {
-//   return await getApi().then((res) => res);
-// };
 var initialState = [];
 
 const rootReducer = async (listItemInCart = initialState, action) => {
-  // state = await getApi().then((result) => {
-  //   return result.data[0].CartDetail;
-  // });
-
-  // listItemInCart = getApi().then((result) => {
-  //   return result.data[0].CartDetail;
-  // });
   if (username !== null) {
-    listItemInCart = JSON.parse(localStorage.getItem("CART-ITEMS"));
+    listItemInCart = JSON.parse(
+      localStorage.getItem("CART-ITEMS") && localStorage.getItem("CART-ITEMS")
+    );
   }
-  // console.log(listItemInCart);
   let newItem = action.payload;
 
   let existItem =
@@ -91,7 +82,6 @@ const rootReducer = async (listItemInCart = initialState, action) => {
       console.log(listItemInCart);
       // item haven't in array
       if (existItem === -1) {
-        // const addedItem = [...listItemInCart, newItem];
         var addToCartApi =
           process.env.REACT_APP_API +
           "cart/?CD_PID=" +
@@ -108,7 +98,6 @@ const rootReducer = async (listItemInCart = initialState, action) => {
         var temp = [...listItemInCart, newItem];
         setLocalStore(temp);
         return temp;
-        // console.log()
       }
       // item exist in array
       else {
@@ -169,21 +158,34 @@ const rootReducer = async (listItemInCart = initialState, action) => {
           listItemInCart[existItem].CD_S_name +
           "&amount=" +
           (listItemInCart[existItem].CD_amount - 1);
-        return axios.post(decreaseItemApi.split(" ").join("")).then(() => {
-          var temp = [
-            ...listItemInCart.map((item, index) => {
-              var decreaseAmount = { ...item };
-              if (index === existItem) {
-                decreaseAmount.CD_amount -= 1;
-                return decreaseAmount;
-              } else {
-                return item;
-              }
-            }),
-          ];
-          setLocalStore(temp);
-          return temp;
-        });
+        axios.post(decreaseItemApi.split(" ").join(""));
+        var temp = [
+          ...listItemInCart.map((item, index) => {
+            var decreaseAmount = { ...item };
+            if (index === existItem) {
+              decreaseAmount.CD_amount -= 1;
+              return decreaseAmount;
+            } else {
+              return item;
+            }
+          }),
+        ];
+        return temp;
+        // return axios.post(decreaseItemApi.split(" ").join("")).then(() => {
+        //   var temp = [
+        //     ...listItemInCart.map((item, index) => {
+        //       var decreaseAmount = { ...item };
+        //       if (index === existItem) {
+        //         decreaseAmount.CD_amount -= 1;
+        //         return decreaseAmount;
+        //       } else {
+        //         return item;
+        //       }
+        //     }),
+        //   ];
+        //   setLocalStore(temp);
+        //   return temp;
+        // });
       }
       break;
 

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import GoogleLogin from "react-google-login";
 
 import Button from "../components/Button";
 
@@ -15,9 +16,55 @@ class Login extends Component {
       loginStatus: false,
     };
   }
+
   componentDidMount = () => {
     window.scrollTo(0, 0);
   };
+
+  responseGG = (res) => {
+    console.log(res.profileObj);
+    const obj = res.profileObj;
+    var addUser = {
+      email: obj.email,
+      fname: obj.familyName,
+      lName: obj.givenName,
+      uname: obj.email,
+      password: obj.googleId,
+      contact: obj.email,
+      address: obj.email,
+    };
+    axios
+      .get(process.env.REACT_APP_API + "checkAccount?username=" + addUser.uname)
+      .then((res) => {
+        if (res.data === "NOT EXIST") {
+          var addNewUser =
+            process.env.REACT_APP_API +
+            "register?fname=" +
+            addUser.fname +
+            "&lname=" +
+            addUser.lName +
+            "&uname=" +
+            addUser.uname +
+            "&password=" +
+            addUser.password +
+            "&email=" +
+            addUser.email +
+            "&phonenumber=" +
+            addUser.contact +
+            "&address=" +
+            addUser.address;
+          axios
+            .post(addNewUser)
+            .then((res) => console.log(">>add new user ", res));
+        } else {
+          alert("Success");
+          localStorage.setItem("ACCOUNT", JSON.stringify(res.data));
+          window.location.href = "/";
+        }
+      })
+      .catch((res) => console.log(res));
+  };
+
   handleSubmit = async (event) => {
     event.preventDefault();
     let res = await axios.get(
@@ -91,8 +138,15 @@ class Login extends Component {
               <Button text="Login" />
             </div>
           </form>
-          <div className="login-with-fb">
-            <span>Login with Facebook</span>
+          <div className="login-with-gg">
+            <GoogleLogin
+              clientId="151924404736-bl390pgbdog67kh6b9po5pe5nlhqfqqd.apps.googleusercontent.com"
+              buttonText="Login with Google"
+              onSuccess={this.responseGG}
+              onFailure={this.responseGG}
+              cookiePolicy={"single_host_origin"}
+            ></GoogleLogin>
+            {/* <span>Login with Facebook</span> */}
           </div>
         </div>
       </div>
