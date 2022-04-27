@@ -48,7 +48,6 @@ class Products extends Component {
   };
 
   handleFilter = (checkedList) => {
-    console.log(">>> check filter ", checkedList);
     if (
       checkedList[0].category.length === 0 &&
       checkedList[1].color.length === 0 &&
@@ -153,28 +152,6 @@ class Products extends Component {
                 ))}
               {this.state.listEmpty && <h2>Không có sản phẩm nào</h2>}
             </div>
-            {/* <InfiniteScroll
-              dataLength={this.state.listItem.length}
-              next={this.fetchMoreDate}
-              hasMore={this.state.hasMore}
-            >
-              <div className="row list-products">
-                {this.state.listItem.map((item, index) => (
-                  <ProductCard
-                    key={index}
-                    img={item.image01}
-                    name={item.title}
-                    price={item.price}
-                    grid=' col-xl-4 col-md-6 col-12'
-                  />
-                ))}
-              </div>
-            </InfiniteScroll> */}
-            {/* {this.state.listItem.length === 18 ? null :
-              <div className="row is-loading">
-                <div className="loader"></div>
-              </div>
-            } */}
           </div>
         </div>
       </div>

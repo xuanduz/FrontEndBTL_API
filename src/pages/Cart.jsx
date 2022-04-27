@@ -11,6 +11,7 @@ class Cart extends Component {
     this.amountRef = React.createRef([]);
     this.setWrapperRef = React.createRef();
     this.state = {
+      test: [],
       render: false,
       cartItems: [],
       clickOutside: false,
@@ -24,18 +25,30 @@ class Cart extends Component {
 
   async componentDidMount() {
     window.scrollTo(0, 0);
+    this.setState({
+      test: await this.props.dataRedux,
+    });
     this.getAPI();
   }
 
-  async componentDidUpdate(prevState, prevProps) {
+  async componentDidUpdate(prevProps) {
+    if (this.props.dataRedux !== prevProps.dataRedux) {
+      console.log("did mount");
+      this.setState({
+        test: await this.props.dataRedux,
+      });
+    }
+    // this.setState({
+    //   test: await this.props.dataRedux,
+    // });
     // console.log("update cart ", await this.props.dataRedux);
     // this.setState({
     //   cartItems: JSON.parse(localStorage.getItem("CART-ITEMS")),
     // });
     // if(this.state.)
-    if (this.props.dataRedux !== prevProps.dataRedux) {
-      // this.getAPI();
-    }
+    // if (this.props.dataRedux !== prevProps.dataRedux) {
+    // this.getAPI();
+    // }
   }
 
   getAPI() {
@@ -58,12 +71,12 @@ class Cart extends Component {
   }
 
   handleChangeAmount = (e, item) => {
-    var value = null;
-    if (e.target.value === "") {
-      value = "";
-    } else if (!isNaN(e.target.value)) {
-      value: parseInt(e.target.value);
-    }
+    // var value = null;
+    // if (e.target.value === "") {
+    //   value = "";
+    // } else if (!isNaN(e.target.value)) {
+    //   value: parseInt(e.target.value);
+    // }
     const temp = {
       CD_PID: item.CD_PID,
       P_slug: item.P_slug,
@@ -91,7 +104,6 @@ class Cart extends Component {
   };
 
   render() {
-    let productRedux = this.props.dataRedux;
     let totalPrice = this.state.cartItems.reduce(
       (total, item) =>
         total + item.CD_amount * (item.P_price * (1 - item.P_discount * 0.01)),
@@ -99,6 +111,8 @@ class Cart extends Component {
     );
     return (
       <div className="cart-container">
+        {/* {console.log("check dataFromRedux ", this.props.dataRedux)} */}
+        {console.log("test ", this.state.test)}
         <div className="cart row">
           <div className="cart-main col-12">
             <div className="cart-main-header row">
@@ -107,9 +121,9 @@ class Cart extends Component {
               <div className="col-2">Số lượng</div>
               <div className="col-2">Số tiền</div>
             </div>
-            {this.state.cartItems &&
-              this.state.cartItems.length > 0 &&
-              this.state.cartItems.map((item, index) => {
+            {this.state.test &&
+              this.state.test.length > 0 &&
+              this.state.test.map((item, index) => {
                 return (
                   <div className="cart-main-content row" key={index}>
                     <div className="cart-main-content-col1 row col-6 ">

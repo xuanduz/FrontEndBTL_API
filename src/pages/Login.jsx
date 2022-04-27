@@ -53,9 +53,12 @@ class Login extends Component {
             addUser.contact +
             "&address=" +
             addUser.address;
-          axios
-            .post(addNewUser)
-            .then((res) => console.log(">>add new user ", res));
+          axios.post(addNewUser).then((res) => {
+            if (res.data === "Success") {
+              localStorage.setItem("ACCOUNT", JSON.stringify(addUser.uname));
+              window.location.href = "/";
+            }
+          });
         } else {
           alert("Success");
           localStorage.setItem("ACCOUNT", JSON.stringify(res.data));
@@ -67,6 +70,7 @@ class Login extends Component {
 
   handleSubmit = async (event) => {
     event.preventDefault();
+
     let res = await axios.get(
       process.env.REACT_APP_API +
         "login" +
@@ -85,6 +89,8 @@ class Login extends Component {
       );
       window.location.href = "/";
     }
+
+    // handleLogin = () => {};
     // this.setState({ loginStatus: res.data });
   };
 

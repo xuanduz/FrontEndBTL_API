@@ -95,6 +95,7 @@ class Register extends Component {
         document.getElementById("phoneNumber").value +
         "&address=" +
         document.getElementById("address").value;
+
       axios.post(addNewUser).then((res) => alert(res.data));
     } else {
       alert(result);

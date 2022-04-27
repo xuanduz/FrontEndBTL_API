@@ -15,6 +15,7 @@ class ProductView extends Component {
     this.collapseBtn = React.createRef();
     this.inputAmount = React.createRef();
     this.state = {
+      test: [],
       productDetail: {},
       randomProduct: [],
       imageDetail: null,
@@ -232,7 +233,6 @@ class ProductView extends Component {
               <h2>{this.state.productDetail.P_name}</h2>
             </div>
             <div className="product-view-detail-price">
-              {console.log(this.state.productDetail)}
               {this.state.productDetail.P_discount ||
               this.state.productDetail.P_discount > 0 ? (
                 <>

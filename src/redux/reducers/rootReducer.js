@@ -127,67 +127,35 @@ const rootReducer = async (listItemInCart = initialState, action) => {
         ];
         setLocalStore(temp);
         return temp;
-        // return axios.post(addItemExistApi.split(" ").join("")).then((res) => {
-        //   const temp = [
-        //     ...listItemInCart.map((item, index) => {
-        //       var itemAdded = { ...item };
-        //       if (index === existItem) {
-        //         itemAdded.CD_amount = itemAdded.CD_amount + newItem.CD_amount;
-        //         return itemAdded;
-        //       } else {
-        //         return item;
-        //       }
-        //     }),
-        //   ];
-        //   return temp;
-        // });
       }
-      break;
 
     case "DECREASE":
-      if (listItemInCart[existItem].CD_amount > 0) {
-        var decreaseItemApi =
-          process.env.REACT_APP_API +
-          "cart/update?CD_PID=" +
-          listItemInCart[existItem].CD_PID +
-          "&username=" +
-          username +
-          "&CD_COLslug=" +
-          listItemInCart[existItem].CD_COLslug +
-          "&CD_S_name=" +
-          listItemInCart[existItem].CD_S_name +
-          "&amount=" +
-          (listItemInCart[existItem].CD_amount - 1);
-        axios.post(decreaseItemApi.split(" ").join(""));
-        var temp = [
-          ...listItemInCart.map((item, index) => {
-            var decreaseAmount = { ...item };
-            if (index === existItem) {
-              decreaseAmount.CD_amount -= 1;
-              return decreaseAmount;
-            } else {
-              return item;
-            }
-          }),
-        ];
-        return temp;
-        // return axios.post(decreaseItemApi.split(" ").join("")).then(() => {
-        //   var temp = [
-        //     ...listItemInCart.map((item, index) => {
-        //       var decreaseAmount = { ...item };
-        //       if (index === existItem) {
-        //         decreaseAmount.CD_amount -= 1;
-        //         return decreaseAmount;
-        //       } else {
-        //         return item;
-        //       }
-        //     }),
-        //   ];
-        //   setLocalStore(temp);
-        //   return temp;
-        // });
-      }
-      break;
+      var decreaseItemApi =
+        process.env.REACT_APP_API +
+        "cart/update?CD_PID=" +
+        listItemInCart[existItem].CD_PID +
+        "&username=" +
+        username +
+        "&CD_COLslug=" +
+        listItemInCart[existItem].CD_COLslug +
+        "&CD_S_name=" +
+        listItemInCart[existItem].CD_S_name +
+        "&amount=" +
+        (listItemInCart[existItem].CD_amount - 1);
+      axios.post(decreaseItemApi.split(" ").join(""));
+      var temp = [
+        ...listItemInCart.map((item, index) => {
+          var decreaseAmount = { ...item };
+          if (index === existItem) {
+            decreaseAmount.CD_amount -= 1;
+            return decreaseAmount;
+          } else {
+            return item;
+          }
+        }),
+      ];
+      setLocalStore(temp);
+      return temp;
 
     case "INCREASE":
       var increaseItemApi =
@@ -218,34 +186,37 @@ const rootReducer = async (listItemInCart = initialState, action) => {
       return temp;
 
     case "ON_CHANGE":
-      console.log(newItem);
-      var changeAmountItemApi =
-        process.env.REACT_APP_API +
-        "cart/update?CD_PID=" +
-        listItemInCart[existItem].CD_PID +
-        "&username=" +
-        username +
-        "&CD_COLslug=" +
-        listItemInCart[existItem].CD_COLslug +
-        "&CD_S_name=" +
-        listItemInCart[existItem].CD_S_name +
-        "&amount=" +
-        newItem.CD_amount;
-      axios.post(changeAmountItemApi.split(" ").join(""));
-      var temp = [
-        ...listItemInCart.map((item, index) => {
-          var changeAmount = { ...item };
-          if (index === existItem) {
-            changeAmount.CD_amount -= newItem.CD_amount;
-            return changeAmount;
-          } else {
-            return item;
-          }
-        }),
-      ];
-      setLocalStore(temp);
-      return temp;
-      break;
+      console.log("onchange ", newItem);
+      if (newItem.CD_amount !== "") {
+        var changeAmountItemApi =
+          process.env.REACT_APP_API +
+          "cart/update?CD_PID=" +
+          listItemInCart[existItem].CD_PID +
+          "&username=" +
+          username +
+          "&CD_COLslug=" +
+          listItemInCart[existItem].CD_COLslug +
+          "&CD_S_name=" +
+          listItemInCart[existItem].CD_S_name +
+          "&amount=" +
+          newItem.CD_amount;
+        axios.post(changeAmountItemApi.split(" ").join(""));
+        var temp = [
+          ...listItemInCart.map((item, index) => {
+            var changeAmount = { ...item };
+            if (index === existItem) {
+              changeAmount.CD_amount = newItem.CD_amount;
+              return changeAmount;
+            } else {
+              return item;
+            }
+          }),
+        ];
+        setLocalStore(temp);
+        return temp;
+      } else {
+        break;
+      }
 
     case "ON_DELETE":
       console.log("delete item ", newItem);
@@ -259,26 +230,18 @@ const rootReducer = async (listItemInCart = initialState, action) => {
         newItem.CD_COLslug +
         "&CD_S_name=" +
         newItem.CD_S_name;
-      axios
-        .post(deleteItemApi.split(" ").join(""))
-        .then((res) => console.log(res));
-      break;
-    // let existDelete = state.listProduct.findIndex(
-    //   (item) =>
-    //     item.slug === action.payload.slug &&
-    //     item.color === action.payload.color &&
-    //     item.size === action.payload.size
-    // );
-    // return {
-    //   ...state,
-    //   listProduct: state.listProduct.filter((x, index) => {
-    //     if (index === existDelete) {
-    //       return false;
-    //     } else {
-    //       return true;
-    //     }
-    //   }),
-    // };
+      axios.post(deleteItemApi.split(" ").join(""));
+      var temp = [
+        ...listItemInCart.filter((item, index) => {
+          if (index === existItem) {
+            return false;
+          } else {
+            return true;
+          }
+        }),
+      ];
+      setLocalStore(temp);
+      return temp;
 
     default:
       return listItemInCart;
