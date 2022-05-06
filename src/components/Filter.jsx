@@ -59,17 +59,17 @@ class Filter extends Component {
       switch (type) {
         case "category":
           this.setState({
-            categoryChecked: [...this.state.categoryChecked, item.CA_name],
+            categoryChecked: [...this.state.categoryChecked, item.caName],
           });
           break;
         case "color":
           this.setState({
-            colorChecked: [...this.state.colorChecked, item.COL_slug],
+            colorChecked: [...this.state.colorChecked, item.colSlug],
           });
           break;
         case "size":
           this.setState({
-            sizeChecked: [...this.state.sizeChecked, item.S_name],
+            sizeChecked: [...this.state.sizeChecked, item.sName],
           });
           break;
         default:
@@ -78,7 +78,7 @@ class Filter extends Component {
       switch (type) {
         case "category":
           const newCategoryChecked = this.state.categoryChecked.filter(
-            (i) => i !== item.CA_name
+            (i) => i !== item.caName
           );
           this.setState({
             categoryChecked: newCategoryChecked,
@@ -86,7 +86,7 @@ class Filter extends Component {
           break;
         case "color":
           const newColorChecked = this.state.colorChecked.filter(
-            (i) => i !== item.COL_slug
+            (i) => i !== item.colSlug
           );
           this.setState({
             colorChecked: newColorChecked,
@@ -94,7 +94,7 @@ class Filter extends Component {
           break;
         case "size":
           const newSizeChecked = this.state.sizeChecked.filter(
-            (i) => i !== item.S_name
+            (i) => i !== item.sName
           );
           this.setState({
             sizeChecked: newSizeChecked,
@@ -133,9 +133,9 @@ class Filter extends Component {
             this.state.categoryList.map((item, index) => (
               <Checkbox
                 key={index}
-                display={item.CA_name}
+                display={item.caName}
                 item={item}
-                checked={this.state.categoryChecked.includes(item.CA_name)}
+                checked={this.state.categoryChecked.includes(item.caName)}
                 onChange={(check, item) =>
                   this.handleCheckbox("category", check, item)
                 }
@@ -148,9 +148,9 @@ class Filter extends Component {
             this.state.colorList.map((item, index) => (
               <Checkbox
                 key={index}
-                display={item.COL_name}
+                display={item.colName}
                 item={item}
-                checked={this.state.colorChecked.includes(item.COL_slug)}
+                checked={this.state.colorChecked.includes(item.colSlug)}
                 onChange={(check, item) =>
                   this.handleCheckbox("color", check, item)
                 }
@@ -163,9 +163,9 @@ class Filter extends Component {
             this.state.sizeList.map((item, index) => (
               <Checkbox
                 key={index}
-                display={item.S_name}
+                display={item.sName}
                 item={item}
-                checked={this.state.sizeChecked.includes(item.S_name)}
+                checked={this.state.sizeChecked.includes(item.sName)}
                 onChange={(check, item) =>
                   this.handleCheckbox("size", check, item)
                 }

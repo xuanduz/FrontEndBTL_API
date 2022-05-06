@@ -5,7 +5,6 @@ const Popup = ({ feature }) => {
 
   return (
     <div id={`popup-${id}`}>
-      {console.log("render popup ", feature.properties)}
       <h3>{name}</h3>
       {description}
     </div>

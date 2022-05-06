@@ -70,9 +70,6 @@ function Contact() {
               longitude={105.8049}
               latitude={21.0229}
               anchor="bottom"
-              onClick={(e) => {
-                console.log(e);
-              }}
             ></Marker>
             <Marker
               longitude={105.78}

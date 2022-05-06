@@ -5,7 +5,6 @@ import axios from "axios";
 
 import Button from "../components/Button";
 import ProductCard from "../components/ProductCard";
-// import Toast from '../components/Toast';
 
 class ProductView extends Component {
   constructor(props) {
@@ -15,7 +14,6 @@ class ProductView extends Component {
     this.collapseBtn = React.createRef();
     this.inputAmount = React.createRef();
     this.state = {
-      test: [],
       productDetail: {},
       randomProduct: [],
       imageDetail: null,
@@ -33,29 +31,12 @@ class ProductView extends Component {
       process.env.REACT_APP_API + `detailProduct/${this.props.slugPath}`
     );
     this.setState({
-      productDetail: res1 && res1.data ? res1.data : {},
+      productDetail: res1 && res1.data ? res1.data[0] : {},
     });
     let res2 = await axios.get(process.env.REACT_APP_API + `randomProduct/4`);
     this.setState({
       randomProduct: res2 && res2.data ? res2.data : {},
     });
-  };
-
-  componentDidUpdate = () => {
-    // const cache = localStorage.getItem("CART-ITEMS");
-    // // if the data is in the cache, return it.
-    // if (cache) return Promise.resolve(JSON.parse(cache));
-    // // else get the data and store it.
-    // return Promise.resolve(
-    //   fetch("https://data.cityofchicago.org/resource/xzkq-xp2w.json")
-    //     .then((res) => res.json())
-    //     .then((data) => {
-    //       localStorage.setItem("requestAll", JSON.stringify(data));
-    //       return data;
-    //     })
-    // );
-    // console.log(this.props.dataRedux);
-    // localStorage.setItem("CART-ITEMS", JSON.stringify(this.props.dataRedux));
   };
 
   handleReadMore = () => {
@@ -110,15 +91,12 @@ class ProductView extends Component {
     if (str === "Lỗi") {
       const item = this.state.productDetail;
       const temp = {
-        CD_PID: item.P_id,
-        P_slug: item.P_slug,
-        P_image: item.P_image,
-        P_name: item.P_name,
-        P_price: item.P_Price,
-        P_discount: item.P_discount,
-        CD_COLslug: this.state.color,
-        CD_S_name: this.state.size,
-        CD_amount: this.state.amount,
+        cdAmount: this.state.amount,
+        cdCar: null,
+        cdColslug: this.state.color,
+        cdPid: item.pId,
+        cdSName: this.state.size,
+        cdP: item,
       };
       return temp;
     } else {
@@ -146,7 +124,7 @@ class ProductView extends Component {
       process.env.REACT_APP_API + `detailProduct/${slugPath}`
     );
     this.setState({
-      productDetail: res && res.data ? res.data : {},
+      productDetail: res && res.data ? res.data[0] : {},
     });
     window.scrollTo(0, 0);
   };
@@ -158,14 +136,6 @@ class ProductView extends Component {
         className="product-view-container"
         key={this.state.productDetail.slug}
       >
-        {/* {console.log(
-          ">> check detail product ",
-          JSON.parse(localStorage.getItem("CART-ITEMS"))
-        )} */}
-        {/* {this.props.dataRedux &&
-          this.props.dataRedux.map((item, index) => {
-            return <h1>{item.CD_PID}</h1>;
-          })} */}
         <div className="product-view row">
           <div className="product-view-image col-lg-7 col-12 row">
             <div className="product-view-image-thumb col-md-2">
@@ -182,7 +152,7 @@ class ProductView extends Component {
                 <img
                   src={
                     this.state.productDetail.P_image &&
-                    require(`../assets/images/products/${this.state.productDetail.P_image}`)
+                    require(`../assets/images/products/${this.state.productDetail.pImage}`)
                   }
                   alt=""
                 />
@@ -201,8 +171,8 @@ class ProductView extends Component {
             <div className="product-view-image-detail col-md-10 col-12">
               <img
                 src={
-                  this.state.productDetail.P_image &&
-                  require(`../assets/images/products/${this.state.productDetail.P_image}`)
+                  this.state.productDetail.pImage &&
+                  require(`../assets/images/products/${this.state.productDetail.pImage}`)
                 }
                 alt=""
               />
@@ -220,8 +190,8 @@ class ProductView extends Component {
               >
                 <img
                   src={
-                    this.state.productDetail.P_image &&
-                    require(`../assets/images/products/${this.state.productDetail.P_image}`)
+                    this.state.productDetail.pImage &&
+                    require(`../assets/images/products/${this.state.productDetail.pImage}`)
                   }
                   alt=""
                 />
@@ -230,22 +200,22 @@ class ProductView extends Component {
           </div>
           <div className="product-view-detail col-lg-5 col-12">
             <div className="product-view-detail-name">
-              <h2>{this.state.productDetail.P_name}</h2>
+              <h2>{this.state.productDetail.pName}</h2>
             </div>
             <div className="product-view-detail-price">
-              {this.state.productDetail.P_discount ||
-              this.state.productDetail.P_discount > 0 ? (
+              {this.state.productDetail.pDiscount ||
+              this.state.productDetail.pDiscount > 0 ? (
                 <>
                   <del>
-                    {parseInt(this.state.productDetail.P_Price)
+                    {parseInt(this.state.productDetail.pPrice)
                       .toString()
                       .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
                     ₫
                   </del>
                   <span>
                     {parseInt(
-                      this.state.productDetail.P_Price *
-                        (1 - this.state.productDetail.P_discount * 0.01)
+                      this.state.productDetail.pPrice *
+                        (1 - this.state.productDetail.pDiscount * 0.01)
                     )
                       .toString()
                       .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
@@ -254,34 +224,26 @@ class ProductView extends Component {
                 </>
               ) : (
                 <span>
-                  {parseInt(this.state.productDetail.P_Price)
+                  {parseInt(this.state.productDetail.pPrice)
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
                   ₫
                 </span>
               )}
-              {/* <span>
-                {parseInt(this.state.productDetail.P_Price)
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
-                ₫
-              </span> */}
             </div>
             <hr />
             <div className="product-view-detail-color">
               <h4>Màu sắc</h4>
               <div className="product-view-detail-color-list">
-                {this.state.productDetail.Colors &&
-                  this.state.productDetail.Colors.map((item, index) => (
+                {this.state.productDetail.colors &&
+                  this.state.productDetail.colors.map((item, index) => (
                     <div
                       key={index}
                       className={
-                        item.COL_slug +
-                        ` ${
-                          this.state.color === item.COL_slug ? " active" : ""
-                        }`
+                        item.colSlug +
+                        ` ${this.state.color === item.colSlug ? " active" : ""}`
                       }
-                      onClick={() => this.setState({ color: item.COL_slug })}
+                      onClick={() => this.setState({ color: item.colSlug })}
                     ></div>
                   ))}
               </div>
@@ -289,16 +251,14 @@ class ProductView extends Component {
             <div className="product-view-detail-size">
               <h4>Kích thước</h4>
               <div className="product-view-detail-size-list">
-                {this.state.productDetail.Sizes &&
-                  this.state.productDetail.Sizes.map((item, index) => (
+                {this.state.productDetail.sizes &&
+                  this.state.productDetail.sizes.map((item, index) => (
                     <div
                       key={index}
-                      className={
-                        this.state.size === item.S_name ? "active" : ""
-                      }
-                      onClick={() => this.setState({ size: item.S_name })}
+                      className={this.state.size === item.sName ? "active" : ""}
+                      onClick={() => this.setState({ size: item.sName })}
                     >
-                      <span>{item.S_name}</span>
+                      <span>{item.sName}</span>
                     </div>
                   ))}
               </div>
@@ -478,15 +438,15 @@ class ProductView extends Component {
           <div className="product-view-more-items row">
             {this.state.randomProduct.map((item, index) => (
               <ProductCard
-                idSP={item.P_id}
-                key={item.P_id}
-                img={item.P_image}
-                name={item.P_name}
-                price={item.P_Price}
-                path={item.P_slug}
-                discount={item.P_discount}
+                idSP={item.pId}
+                key={item.pId}
+                img={item.pImage}
+                name={item.pName}
+                price={item.pPrice}
+                path={item.pSlug}
+                discount={item.pDiscount}
                 grid=" col-xl-3 col-md-6 col-12"
-                handleChangePath={() => this.handleChangePath(item.P_slug)}
+                handleChangePath={() => this.handleChangePath(item.pSlug)}
               />
             ))}
           </div>

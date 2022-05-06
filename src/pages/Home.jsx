@@ -18,14 +18,14 @@ class Home extends Component {
   async componentDidMount() {
     window.scrollTo(0, 0);
     let response1 = await axios.get(
-      process.env.REACT_APP_API + "home/topSaleProduct/4"
+      process.env.REACT_APP_API + "topSaleProduct/4"
     );
     this.setState({
       saleProduct: response1 && response1.data ? response1.data : [],
     });
 
     let response2 = await axios.get(
-      process.env.REACT_APP_API + "/randomProduct/8"
+      process.env.REACT_APP_API + "randomProduct/8"
     );
     this.setState({
       randomProduct: response2 && response2.data ? response2.data : [],
@@ -48,13 +48,13 @@ class Home extends Component {
           <div className="section-sale-product-card row">
             {this.state.saleProduct.map((item, index) => (
               <ProductCard
-                idSP={item.P_id}
-                key={item.P_id}
-                img={item.P_image}
-                name={item.P_name}
-                price={item.P_Price}
-                path={item.P_slug}
-                discount={item.P_discount}
+                idSP={item.pId}
+                key={item.pId}
+                img={item.pImage}
+                name={item.pName}
+                price={item.pPrice}
+                path={item.pSlug}
+                discount={item.pDiscount}
                 grid=" col-xl-3 col-md-6 col-12"
               />
             ))}
@@ -69,13 +69,13 @@ class Home extends Component {
           <div className="section-new-product-card section-sale-product-card row">
             {this.state.randomProduct.map((item, index) => (
               <ProductCard
-                idSP={item.P_id}
-                key={item.P_id}
-                img={item.P_image}
-                name={item.P_name}
-                price={item.P_Price}
-                path={item.P_slug}
-                discount={item.P_discount}
+                idSP={item.pId}
+                key={item.pId}
+                img={item.pImage}
+                name={item.pName}
+                price={item.pPrice}
+                path={item.pSlug}
+                discount={item.pDiscount}
                 grid=" col-xl-3 col-md-6 col-12"
               />
             ))}

@@ -22,7 +22,6 @@ class Login extends Component {
   };
 
   responseGG = (res) => {
-    console.log(res.profileObj);
     const obj = res.profileObj;
     var addUser = {
       email: obj.email,
@@ -57,6 +56,8 @@ class Login extends Component {
             if (res.data === "Success") {
               localStorage.setItem("ACCOUNT", JSON.stringify(addUser.uname));
               window.location.href = "/";
+            } else {
+              alert(res.data);
             }
           });
         } else {
@@ -89,9 +90,6 @@ class Login extends Component {
       );
       window.location.href = "/";
     }
-
-    // handleLogin = () => {};
-    // this.setState({ loginStatus: res.data });
   };
 
   handleChange = (e) => {
@@ -152,7 +150,6 @@ class Login extends Component {
               onFailure={this.responseGG}
               cookiePolicy={"single_host_origin"}
             ></GoogleLogin>
-            {/* <span>Login with Facebook</span> */}
           </div>
         </div>
       </div>
@@ -166,25 +163,3 @@ function WithNavigate(props) {
 }
 
 export default WithNavigate;
-
-// <script>
-//   window.fbAsyncInit = function() {
-//     FB.init({
-//       appId      : '{your-app-id}',
-//       cookie     : true,
-//       xfbml      : true,
-//       version    : '{api-version}'
-//     });
-
-//     FB.AppEvents.logPageView();
-
-//   };
-
-//   (function(d, s, id){
-//      var js, fjs = d.getElementsByTagName(s)[0];
-//      if (d.getElementById(id)) {return;}
-//      js = d.createElement(s); js.id = id;
-//      js.src = "https://connect.facebook.net/en_US/sdk.js";
-//      fjs.parentNode.insertBefore(js, fjs);
-//    }(document, 'script', 'facebook-jssdk'));
-// </script>

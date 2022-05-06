@@ -19,6 +19,10 @@ body.dark-mode {
   background-color: $background-color-dark !important;
 }
 
+.dark-mode .header-nav-items-account-items{
+  color: $font-color-light;
+}
+
 .dark-mode .header-nav-items ul a:hover {
   background-color: $background-color-light !important;
   color: $font-color-light !important;

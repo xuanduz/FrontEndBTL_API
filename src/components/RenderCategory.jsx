@@ -4,7 +4,6 @@ import Checkbox from "./Checkbox";
 function RenderCategory(props) {
   return (
     <div>
-      {console.log("render category ", props.items)}
       {props.items &&
         props.items.map((item, index) => (
           <Checkbox

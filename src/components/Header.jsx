@@ -10,6 +10,8 @@ class Header extends Component {
     super();
     this.headerRef = React.createRef();
     this.state = {
+      listProduct: [],
+      totalAmount: null,
       mainNav: [
         {
           display: "Trang chủ",
@@ -26,12 +28,13 @@ class Header extends Component {
   async componentDidMount() {
     const res = await axios.get(process.env.REACT_APP_API + "getStyle");
     this.setState({
+      listProduct: await this.props.dataRedux,
       mainNav: [
         ...this.state.mainNav,
         ...res.data.map((item, index) => {
           return {
-            display: item.ST_name,
-            path: "/products/" + item.ST_slug,
+            display: item.stName,
+            path: "/products/" + item.stSlug,
           };
         }),
       ],
@@ -45,6 +48,31 @@ class Header extends Component {
       } else {
         this.headerRef.current.classList.remove("shrink");
       }
+    });
+  }
+
+  async componentDidUpdate(prevProps) {
+    if (this.props.dataRedux !== prevProps.dataRedux) {
+      const res = await axios.get(process.env.REACT_APP_API + "getStyle");
+      this.setState({
+        ...this.state,
+        listProduct: await this.props.dataRedux,
+      });
+    }
+  }
+
+  async callApiCategory() {
+    const res = await axios.get(process.env.REACT_APP_API + "getStyle");
+    this.setState({
+      mainNav: [
+        ...this.state.mainNav,
+        ...res.data.map((item, index) => {
+          return {
+            display: item.stName,
+            path: "/products/" + item.stSlug,
+          };
+        }),
+      ],
     });
   }
 
@@ -62,12 +90,11 @@ class Header extends Component {
   };
 
   render() {
-    const totalAmount = [];
-    // const totalAmount = this.props.dataRedux.reduce(
-    //   (total, item) => total + item.amount,
-    //   0
-    // );
-
+    // const totalAmount = [];
+    const totalAmount = this.state.listProduct.reduce(
+      (total, item) => total + item.cdAmount,
+      0
+    );
     const checkAccount = JSON.parse(localStorage.getItem("ACCOUNT"));
     return (
       <div className="header-container" ref={this.headerRef}>
@@ -154,6 +181,35 @@ class Header extends Component {
                 <li>{item.display}</li>
               </Link>
             ))}
+            <div className="header-nav-items header-nav-items-account">
+              <i className="bx bx-user-circle"></i>
+              <ul className="header-nav-items-account-items">
+                {checkAccount == null ? (
+                  <div>
+                    <li>
+                      <Link to="/login">
+                        <i className="bx bxs-log-in-circle"></i>
+                        <span>Login</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/register">
+                        <i className="bx bxs-user-plus"></i>
+                        <span>Register</span>
+                      </Link>
+                    </li>
+                  </div>
+                ) : (
+                  <li>
+                    <h6>Hello, {checkAccount}</h6>
+                    <div className="logout-btn" onClick={this.handleLogout}>
+                      <i className="bx bxs-log-out-circle"></i>
+                      <span>Log Out</span>
+                    </div>
+                  </li>
+                )}
+              </ul>
+            </div>
             <Link to="/cart" onClick={() => this.handleBtnMenu()}>
               <i className="fas fa-shopping-bag"></i>
               <div

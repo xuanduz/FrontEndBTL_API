@@ -34,7 +34,6 @@ class Register extends Component {
 
     if (document.getElementById("fName").value == "") {
       hasError = true;
-      // console.log(this)
       errorString += "\nEnter first name";
     }
 

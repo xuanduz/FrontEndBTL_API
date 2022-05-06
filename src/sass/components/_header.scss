@@ -17,6 +17,7 @@
 
   @include mobile {
     height: $header-height-mobile;
+    font-size: 10px;
   }
 
   .header {
@@ -35,6 +36,7 @@
         display: flex;
         align-items: center;
       }
+      
     }
     &-logo {
       a {
@@ -131,6 +133,7 @@
           }
         }
         &:hover .header-nav-items-account-items{
+          box-shadow: 2px 3px 15px $color-box-shadow;
           display: inline-block;
           animation: showHeaderIcon .3s ease-in-out;
           opacity: 1;
@@ -266,6 +269,19 @@
         position: relative;
         padding: 0 10px;
       }
+    }
+    @include mobile{
+      // .header-container-sidebar{
+        a{
+          font-size: 1rem !important;
+        }
+        ul{
+          text-transform: capitalize;
+        }
+        // &-list{
+        //   text-transform: capitalize;
+        // }
+      // }
     }
   }
 }

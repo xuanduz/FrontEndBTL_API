@@ -1,17 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import axios from "axios";
-
 import Button from "../components/Button";
-
 class Cart extends Component {
   constructor() {
     super();
     this.amountRef = React.createRef([]);
     this.setWrapperRef = React.createRef();
     this.state = {
-      test: [],
       render: false,
       cartItems: [],
       clickOutside: false,
@@ -26,71 +22,24 @@ class Cart extends Component {
   async componentDidMount() {
     window.scrollTo(0, 0);
     this.setState({
-      test: await this.props.dataRedux,
+      cartItems: await this.props.dataRedux,
     });
-    this.getAPI();
   }
 
   async componentDidUpdate(prevProps) {
     if (this.props.dataRedux !== prevProps.dataRedux) {
-      console.log("did mount");
       this.setState({
-        test: await this.props.dataRedux,
+        cartItems: await this.props.dataRedux,
       });
-    }
-    // this.setState({
-    //   test: await this.props.dataRedux,
-    // });
-    // console.log("update cart ", await this.props.dataRedux);
-    // this.setState({
-    //   cartItems: JSON.parse(localStorage.getItem("CART-ITEMS")),
-    // });
-    // if(this.state.)
-    // if (this.props.dataRedux !== prevProps.dataRedux) {
-    // this.getAPI();
-    // }
-  }
-
-  getAPI() {
-    var username =
-      JSON.parse(localStorage.getItem("ACCOUNT")) !== null
-        ? JSON.parse(localStorage.getItem("ACCOUNT"))
-        : null;
-    if (username !== null) {
-      axios
-        .get(process.env.REACT_APP_API + "getCartByUser/" + username)
-        .then((res) => {
-          this.setState({
-            cartItems:
-              res && res.data[0] && res.data[0].CartDetail
-                ? res.data[0].CartDetail
-                : [],
-          });
-        });
     }
   }
 
   handleChangeAmount = (e, item) => {
-    // var value = null;
-    // if (e.target.value === "") {
-    //   value = "";
-    // } else if (!isNaN(e.target.value)) {
-    //   value: parseInt(e.target.value);
-    // }
-    const temp = {
-      CD_PID: item.CD_PID,
-      P_slug: item.P_slug,
-      P_image: item.P_image,
-      P_name: item.P_name,
-      P_price: item.P_price,
-      P_discount: item.P_discount,
-      CD_COLslug: item.CD_COLslug,
-      CD_S_name: item.CD_S_name,
-      CD_amount: e.target.value,
+    const newItem = {
+      ...item,
+      cdAmount: e.target.value,
     };
-    console.log(temp);
-    this.getAPI();
-    this.props.handleOnChange(temp);
+    this.props.handleOnChange(newItem);
   };
 
   handleKeyPress = (e) => {
@@ -106,13 +55,13 @@ class Cart extends Component {
   render() {
     let totalPrice = this.state.cartItems.reduce(
       (total, item) =>
-        total + item.CD_amount * (item.P_price * (1 - item.P_discount * 0.01)),
+        total +
+        item.cdAmount * (item.cdP.pPrice * (1 - item.cdP.pDiscount * 0.01)),
       0
     );
     return (
       <div className="cart-container">
-        {/* {console.log("check dataFromRedux ", this.props.dataRedux)} */}
-        {console.log("test ", this.state.test)}
+        {console.log(this.state.cartItems)}
         <div className="cart row">
           <div className="cart-main col-12">
             <div className="cart-main-header row">
@@ -121,30 +70,30 @@ class Cart extends Component {
               <div className="col-2">Số lượng</div>
               <div className="col-2">Số tiền</div>
             </div>
-            {this.state.test &&
-              this.state.test.length > 0 &&
-              this.state.test.map((item, index) => {
+            {this.state.cartItems &&
+              this.state.cartItems.length > 0 &&
+              this.state.cartItems.map((item, index) => {
                 return (
                   <div className="cart-main-content row" key={index}>
                     <div className="cart-main-content-col1 row col-6 ">
                       <div className="cart-main-content-col1-img col-3">
                         <img
-                          src={require(`../assets/images/products/${item.P_image}`)}
+                          src={require(`../assets/images/products/${item.cdP.pImage}`)}
                           alt=""
                         />
                       </div>
                       <div className="cart-main-content-col1-text col-8">
                         <div>
-                          <Link to={`/detail/${item.P_slug}`}>
+                          <Link to={`/detail/${item.cdP.pSlug}`}>
                             <div className="title">
                               <span style={{ textTransform: "uppercase" }}>
-                                {item.P_name}
+                                {item.cdP.pName}
                               </span>
                             </div>
                           </Link>
                           <div className="type">
                             <span>
-                              {item.CD_COLslug} / {item.CD_S_name}
+                              {item.cdColslug} / {item.cdSName}
                             </span>
                           </div>
                         </div>
@@ -160,8 +109,8 @@ class Cart extends Component {
                     <div className="cart-price-per-item col-2">
                       <div>
                         {(
-                          parseInt(item.P_price) *
-                          (1 - parseFloat(item.P_discount) * 0.01)
+                          parseInt(item.cdP.pPrice) *
+                          (1 - parseFloat(item.cdP.pDiscount) * 0.01)
                         )
                           .toString()
                           .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
@@ -183,7 +132,7 @@ class Cart extends Component {
                           type="number"
                           id={`amountInput` + index.toString()}
                           className="amount-input"
-                          value={item.CD_amount}
+                          value={item.cdAmount}
                           onChange={(e) => this.handleChangeAmount(e, item)}
                           ref={this.amountRef[index]}
                           onKeyPress={this.handleKeyPress}
@@ -198,15 +147,15 @@ class Cart extends Component {
                     </div>
                     <div className="cart-total-price col-2">
                       <div>
-                        {item.CD_amount === ""
-                          ? (parseInt(item.P_price) * 0)
+                        {item.cdAmount === ""
+                          ? (parseInt(item.cdP.pPrice) * 0)
                               .toString()
                               .toString()
                               .replace(/\B(?=(\d{3})+(?!\d))/g, ".")
                           : (
-                              parseInt(item.P_price) *
-                              (1 - parseFloat(item.P_discount) * 0.01) *
-                              item.CD_amount
+                              parseInt(item.cdP.pPrice) *
+                              (1 - parseFloat(item.cdP.pDiscount) * 0.01) *
+                              item.cdAmount
                             )
                               .toString()
                               .replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
@@ -281,7 +230,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     handleDecreaseBtn: (item) => dispatch({ type: "DECREASE", payload: item }),
     handleIncreaseBtn: (item) => dispatch({ type: "INCREASE", payload: item }),
-    handleOnChange: (obj) => dispatch({ type: "ON_CHANGE", payload: obj }),
+    handleOnChange: (item) => dispatch({ type: "ON_CHANGE", payload: item }),
     handleDelete: (item) => dispatch({ type: "ON_DELETE", payload: item }),
   };
 };

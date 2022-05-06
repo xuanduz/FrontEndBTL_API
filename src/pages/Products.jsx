@@ -61,7 +61,7 @@ class Products extends Component {
       if (checkedList[0].category.length > 0) {
         checkedList[0].category.map((itemCat, index) => {
           result = result.concat(
-            this.state.listItemStorage.filter((i) => i.CA_name === itemCat)
+            this.state.listItemStorage.filter((i) => i.pCa.caName === itemCat)
           );
         });
       }
@@ -70,12 +70,12 @@ class Products extends Component {
           if (checkedList[0].category.length === 0) {
             result = result.concat(
               this.state.listItemStorage.filter((i) =>
-                i.P_color.some((e) => e.COL_slug === itemCol)
+                i.colors.some((e) => e.colSlug === itemCol)
               )
             );
           } else {
             result = result.filter((i) =>
-              i.P_color.some((e) => e.COL_slug === itemCol)
+              i.colors.some((e) => e.colSlug === itemCol)
             );
           }
         });
@@ -85,12 +85,12 @@ class Products extends Component {
           if (checkedList[0].category.length === 0) {
             result = result.concat(
               this.state.listItemStorage.filter((i) =>
-                i.P_size.some((e) => e.S_name === itemSiz)
+                i.sizes.some((e) => e.sName === itemSiz)
               )
             );
           } else {
             result = result.filter((i) =>
-              i.P_size.some((e) => e.S_name === itemSiz)
+              i.sizes.some((e) => e.sName === itemSiz)
             );
           }
         });
@@ -140,17 +140,19 @@ class Products extends Component {
                 this.state.listItem.length > 0 &&
                 this.state.listItem.map((item, index) => (
                   <ProductCard
-                    idSP={item.P_id}
-                    key={item.P_id}
-                    img={item.P_image}
-                    name={item.P_name}
-                    price={item.P_price}
-                    path={item.P_slug}
-                    discount={item.P_discount}
+                    key={item.pId}
+                    idSP={item.pId}
+                    img={item.pImage}
+                    name={item.pName}
+                    price={item.pPrice}
+                    path={item.pSlug}
+                    discount={item.pDiscount}
                     grid=" col-xl-3 col-md-6 col-12"
                   />
                 ))}
-              {this.state.listEmpty && <h2>Không có sản phẩm nào</h2>}
+              {this.state.listItem && this.state.listItem.length === 0 && (
+                <h2>Không có sản phẩm nào</h2>
+              )}
             </div>
           </div>
         </div>

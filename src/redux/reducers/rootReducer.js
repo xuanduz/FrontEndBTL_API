@@ -5,49 +5,9 @@ const username =
     ? JSON.parse(localStorage.getItem("ACCOUNT"))
     : null;
 
-// const fetchData = async () => {
-//   if (username !== null) {
-//     const temp = await axios.get(
-//       process.env.REACT_APP_API + "getCartByUser/" + username
-//     );
-//     return temp.data[0].CartDetail;
-//   }
-// };
-// localStorage.setItem(
-//   "CART-ITEMS",
-//   JSON.stringify(fetchData().data[0].CartDetail)
-// );
-// const excute = async () => {
-//   localStorage.setItem("CART-ITEMS", JSON.stringify(await fetchData()));
-//   console.log(await fetchData());
-// };
-// excute();
-
-// const items =
-//   localStorage.getItem("CART-ITEMS") !== null
-//     ? JSON.parse(localStorage.getItem("CART-ITEMS"))
-//     : [];
-
-// localStorage.setItem(
-//   "CART-Items",
-//   JSON.stringify(
-//     axios
-//       .get(process.env.REACT_APP_API + "getCartByUser/" + username)
-//       .then((res) => res.data[0].CartDetail)
-//   )
-// );
-
-// var initState = {
-//   listProduct: [
-//     {
-//       a: 1,
-//     },
-//     {
-//       a: 2,
-//     },
-//   ],
-// };
-var initState = [];
+axios.get(process.env.REACT_APP_API + "getStyle").then((res) => {
+  localStorage.setItem("CATEGORY", JSON.stringify(res.data));
+});
 
 const setLocalStore = (list) => {
   localStorage.setItem("CART-ITEMS", JSON.stringify(list));
@@ -56,44 +16,53 @@ const setLocalStore = (list) => {
 var initialState = [];
 
 const rootReducer = async (listItemInCart = initialState, action) => {
+  // check logged in user
   if (username !== null) {
-    listItemInCart = JSON.parse(
-      localStorage.getItem("CART-ITEMS") && localStorage.getItem("CART-ITEMS")
-    );
+    var item =
+      (await localStorage.getItem("CART-ITEMS")) &&
+      localStorage.getItem("CART-ITEMS");
+    if (item !== "undefined") {
+      listItemInCart = await JSON.parse(item);
+    }
   }
+
   let newItem = action.payload;
 
   let existItem =
     newItem &&
     listItemInCart.findIndex(
       (item) =>
-        item.P_slug === newItem.P_slug &&
-        item.CD_COLslug === newItem.CD_COLslug &&
-        item.CD_S_name === newItem.CD_S_name
+        item.cdP.pSlug === newItem.cdP.pSlug &&
+        item.cdColslug === newItem.cdColslug &&
+        item.cdSName === newItem.cdSName
     );
-
   switch (action.type) {
     case "ADD_TO_CART":
+      var indexOfItemAddToCart = listItemInCart.findIndex(
+        (item) =>
+          item.cdP.pSlug === newItem.cdP.pSlug &&
+          item.cdColslug === newItem.cdColslug &&
+          item.cdSName === newItem.cdSName
+      );
       axios
         .get(process.env.REACT_APP_API + "getCartByUser/" + username)
         .then((res) => {
           listItemInCart = res.data[0].CartDetail;
         });
-      console.log(listItemInCart);
       // item haven't in array
       if (existItem === -1) {
         var addToCartApi =
           process.env.REACT_APP_API +
-          "cart/?CD_PID=" +
-          newItem.CD_PID +
+          "cart/insert?CD_PID=" +
+          newItem.cdPid +
           "&username=" +
           username +
           "&CD_COLslug=" +
-          newItem.CD_COLslug +
-          "&CD_S_name=" +
-          newItem.CD_S_name +
+          newItem.cdColslug +
+          "&CD_S_Name=" +
+          newItem.cdSName +
           "&CD_amount=" +
-          newItem.CD_amount;
+          newItem.cdAmount;
         axios.post(addToCartApi.split(" ").join(""));
         var temp = [...listItemInCart, newItem];
         setLocalStore(temp);
@@ -104,21 +73,21 @@ const rootReducer = async (listItemInCart = initialState, action) => {
         var addItemExistApi =
           process.env.REACT_APP_API +
           "cart/update?CD_PID=" +
-          listItemInCart[existItem].CD_PID +
+          listItemInCart[indexOfItemAddToCart].cdP.pId +
           "&username=" +
           username +
           "&CD_COLslug=" +
-          listItemInCart[existItem].CD_COLslug +
-          "&CD_S_name=" +
-          listItemInCart[existItem].CD_S_name +
+          listItemInCart[indexOfItemAddToCart].cdColslug +
+          "&CD_S_Name=" +
+          listItemInCart[indexOfItemAddToCart].cdSName +
           "&amount=" +
-          (listItemInCart[existItem].CD_amount + newItem.CD_amount);
+          (listItemInCart[indexOfItemAddToCart].cdAmount + newItem.cdAmount);
         axios.post(addItemExistApi.split(" ").join(""));
         var temp = [
           ...listItemInCart.map((item, index) => {
             var itemAdded = { ...item };
-            if (index === existItem) {
-              itemAdded.CD_amount = itemAdded.CD_amount + newItem.CD_amount;
+            if (index === indexOfItemAddToCart) {
+              itemAdded.cdAmount = itemAdded.cdAmount + newItem.cdAmount;
               return itemAdded;
             } else {
               return item;
@@ -133,21 +102,21 @@ const rootReducer = async (listItemInCart = initialState, action) => {
       var decreaseItemApi =
         process.env.REACT_APP_API +
         "cart/update?CD_PID=" +
-        listItemInCart[existItem].CD_PID +
+        listItemInCart[existItem].cdP.pId +
         "&username=" +
         username +
         "&CD_COLslug=" +
-        listItemInCart[existItem].CD_COLslug +
-        "&CD_S_name=" +
-        listItemInCart[existItem].CD_S_name +
+        listItemInCart[existItem].cdColslug +
+        "&CD_S_Name=" +
+        listItemInCart[existItem].cdSName +
         "&amount=" +
-        (listItemInCart[existItem].CD_amount - 1);
+        (listItemInCart[existItem].cdAmount - 1);
       axios.post(decreaseItemApi.split(" ").join(""));
       var temp = [
         ...listItemInCart.map((item, index) => {
           var decreaseAmount = { ...item };
           if (index === existItem) {
-            decreaseAmount.CD_amount -= 1;
+            decreaseAmount.cdAmount -= 1;
             return decreaseAmount;
           } else {
             return item;
@@ -161,21 +130,21 @@ const rootReducer = async (listItemInCart = initialState, action) => {
       var increaseItemApi =
         process.env.REACT_APP_API +
         "cart/update?CD_PID=" +
-        listItemInCart[existItem].CD_PID +
+        listItemInCart[existItem].cdP.pId +
         "&username=" +
         username +
         "&CD_COLslug=" +
-        listItemInCart[existItem].CD_COLslug +
-        "&CD_S_name=" +
-        listItemInCart[existItem].CD_S_name +
+        listItemInCart[existItem].cdColslug +
+        "&CD_S_Name=" +
+        listItemInCart[existItem].cdSName +
         "&amount=" +
-        (listItemInCart[existItem].CD_amount + 1);
+        (listItemInCart[existItem].cdAmount + 1);
       axios.post(increaseItemApi.split(" ").join(""));
       var temp = [
         ...listItemInCart.map((item, index) => {
           var increaseAmount = { ...item };
           if (index === existItem) {
-            increaseAmount.CD_amount += 1;
+            increaseAmount.cdAmount += 1;
             return increaseAmount;
           } else {
             return item;
@@ -186,50 +155,58 @@ const rootReducer = async (listItemInCart = initialState, action) => {
       return temp;
 
     case "ON_CHANGE":
-      console.log("onchange ", newItem);
-      if (newItem.CD_amount !== "") {
+      if (newItem.cdAmount !== "") {
         var changeAmountItemApi =
           process.env.REACT_APP_API +
           "cart/update?CD_PID=" +
-          listItemInCart[existItem].CD_PID +
+          listItemInCart[existItem].cdP.pId +
           "&username=" +
           username +
           "&CD_COLslug=" +
-          listItemInCart[existItem].CD_COLslug +
-          "&CD_S_name=" +
-          listItemInCart[existItem].CD_S_name +
+          listItemInCart[existItem].cdColslug +
+          "&CD_S_Name=" +
+          listItemInCart[existItem].cdSName +
           "&amount=" +
-          newItem.CD_amount;
+          newItem.cdAmount;
         axios.post(changeAmountItemApi.split(" ").join(""));
         var temp = [
           ...listItemInCart.map((item, index) => {
             var changeAmount = { ...item };
             if (index === existItem) {
-              changeAmount.CD_amount = newItem.CD_amount;
+              changeAmount.cdAmount = newItem.cdAmount;
               return changeAmount;
             } else {
               return item;
             }
           }),
         ];
-        setLocalStore(temp);
-        return temp;
       } else {
-        break;
+        var temp = [
+          ...listItemInCart.map((item, index) => {
+            var changeAmount = { ...item };
+            if (index === existItem) {
+              changeAmount.cdAmount = newItem.cdAmount;
+              return changeAmount;
+            } else {
+              return item;
+            }
+          }),
+        ];
       }
+      setLocalStore(temp);
+      return temp;
 
     case "ON_DELETE":
-      console.log("delete item ", newItem);
       var deleteItemApi =
         process.env.REACT_APP_API +
         "cart/delete?CD_PID=" +
-        newItem.CD_PID +
+        newItem.cdP.pId +
         "&username=" +
         username +
         "&CD_COLslug=" +
-        newItem.CD_COLslug +
-        "&CD_S_name=" +
-        newItem.CD_S_name;
+        newItem.cdColslug +
+        "&CD_S_Name=" +
+        newItem.cdSName;
       axios.post(deleteItemApi.split(" ").join(""));
       var temp = [
         ...listItemInCart.filter((item, index) => {

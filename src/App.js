@@ -32,7 +32,7 @@ function App() {
         const temp = await axios.get(
           process.env.REACT_APP_API + "getCartByUser/" + username
         );
-        return temp.data[0].CartDetail;
+        return temp.data[0].cartdeta;
       }
     };
     const excute = async () => {
@@ -52,8 +52,6 @@ function App() {
           path="/products/:stylePath"
           element={<GetProductByStyle />}
         ></Route>
-        {/* <Route path="/products/:women" element={<GetProductByStyle />}></Route>
-        <Route path="/products/:kids" element={<GetProductByStyle />}></Route> */}
         <Route path="/detail/:slug" element={<GetSlug />}></Route>
         <Route path="/contact" element={<Contact />}></Route>
         <Route path="/cart" element={<Cart />}></Route>
